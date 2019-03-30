@@ -14,9 +14,20 @@ namespace MauticPlugin\MauticGrapeJsBundle\EventListener;
 use Mautic\CoreBundle\CoreEvents;
 use Mautic\CoreBundle\Event\CustomAssetsEvent;
 use Mautic\CoreBundle\EventListener\CommonSubscriber;
+use Symfony\Component\Routing\RouterInterface;
 
 class AssetSubscriber extends CommonSubscriber
 {
+
+    /**
+     * AssetSubscriber constructor.
+     *
+     * @param RouterInterface $router
+     */
+    public function __construct(RouterInterface $router)
+    {
+        $this->router = $router;
+    }
 
 
     public static function getSubscribedEvents()

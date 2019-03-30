@@ -19,12 +19,14 @@ return [
             'mautic.grape.js.asset.subscriber'=>[
                 'class'=> \MauticPlugin\MauticGrapeJsBundle\EventListener\AssetSubscriber::class,
                 'arguments' => [
+                    'router',
                 ],
             ],
             'mautic.grape.js.button.subscriber'=>[
                 'class'=> \MauticPlugin\MauticGrapeJsBundle\EventListener\ButtonSubscriber::class,
                 'arguments' => [
-                    'mautic.helper.integration'
+                    'mautic.helper.integration',
+                    'router',
                 ],
             ]
         ],

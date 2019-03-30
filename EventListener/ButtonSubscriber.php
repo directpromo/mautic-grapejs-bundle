@@ -16,6 +16,7 @@ use Mautic\CoreBundle\Event\CustomButtonEvent;
 use Mautic\CoreBundle\EventListener\CommonSubscriber;
 use Mautic\CoreBundle\Templating\Helper\ButtonHelper;
 use Mautic\PluginBundle\Helper\IntegrationHelper;
+use Symfony\Component\Routing\RouterInterface;
 
 class ButtonSubscriber extends CommonSubscriber
 {
@@ -28,10 +29,12 @@ class ButtonSubscriber extends CommonSubscriber
      * ButtonSubscriber constructor.
      *
      * @param IntegrationHelper $helper
+     * @param RouterInterface   $router
      */
-    public function __construct(IntegrationHelper $helper)
+    public function __construct(IntegrationHelper $helper, RouterInterface $router)
     {
         $this->helper = $helper;
+        $this->router = $router;
     }
 
     public static function getSubscribedEvents()
@@ -51,25 +54,33 @@ class ButtonSubscriber extends CommonSubscriber
         if (false === $myIntegration || !$myIntegration->getIntegrationSettings()->getIsPublished()) {
             return;
         }
-        $windowUrlEdit = '';
         if (0 === strpos($event->getRoute(), 'mautic_email_')) {
-            echo $event->getItem();
             if ($event->getItem()) {
+                /** @var RouterInterface $route */
+                $builder = $this->router->generate(
+                    'mautic_dynamicContent_action',
+                    [
+                        'objectAction' => 'edit',
+                        'objectId'     => 'dynamicContentId',
+                        'contentOnly'  => 1,
+                    ]
+                );
+
+                $builder = 'http://mautic.test/mautic/grapejs.html';
+
                 $lookupContactButton = [
                     'attr' => [
                         'class'    => 'btn btn-primary btn-nospin',
-                        'onclick'  => 'Mautic.loadNewWindow(Mautic.standardFocusUrl({"windowUrl": "'.$windowUrlEdit.'"}))',
+                        'onclick' => 'Mautic.loadNewWindow({windowUrl: \''.$builder.'\'})',
                         'icon'     => 'fa fa-edit',
                     ],
-                    'btnText'   => 'mautic.focus.show.edit.item',
+                    'btnText'   => 'nieco',
                 ];
-//page.header.right
-                die(print_r('a'));
                 $event
                     ->addButton(
                         $lookupContactButton,
-                        ButtonHelper::LOCATION_TOOLBAR_ACTIONS,
-                        ['mautic_email_action', ['objectAction' => 'edit']]
+                        ButtonHelper::LOCATION_PAGE_ACTIONS,
+                        ['mautic_email_action', ['objectAction' => 'view']]
                     );
             }
         }

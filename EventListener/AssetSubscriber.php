@@ -14,6 +14,7 @@ namespace MauticPlugin\MauticGrapeJsBundle\EventListener;
 use Mautic\CoreBundle\CoreEvents;
 use Mautic\CoreBundle\Event\CustomAssetsEvent;
 use Mautic\CoreBundle\EventListener\CommonSubscriber;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 
 class AssetSubscriber extends CommonSubscriber
@@ -33,7 +34,7 @@ class AssetSubscriber extends CommonSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            CoreEvents::VIEW_INJECT_CUSTOM_ASSETS => ['injectAssets', 0],
+            CoreEvents::VIEW_INJECT_CUSTOM_ASSETS => ['injectAssets', -10],
         ];
     }
 
@@ -43,6 +44,7 @@ class AssetSubscriber extends CommonSubscriber
     public function injectAssets(CustomAssetsEvent $assetsEvent)
     {
         $assetsEvent->addScript('https://unpkg.com/grapesjs');
+        $assetsEvent->addScript('http://mautic.test/mautic/plugins/MauticGrapeJsBundle/Assets/js/grapejs.js');
         $assetsEvent->addStylesheet('https://unpkg.com/grapesjs/dist/css/grapes.min.css');
     }
 }

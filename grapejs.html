@@ -7,15 +7,59 @@
 
 <link rel="stylesheet" href="https://unpkg.com/grapesjs/dist/css/grapes.min.css">
 <script src="https://unpkg.com/grapesjs"></script>
-
+ <div id="basic-actions"></div>
 <div id="gjs"></div>
 
 <script type="text/javascript">
+console.log(window.opener.mQuery('textarea.builder-html').val());
   var editor = grapesjs.init({
       container : '#gjs',
-      components: '<div class="txt-red">Hello world!</div>',
-      style: '.txt-red{color: red}',
+      components: window.opener.mQuery('textarea.builder-html').val(),
+      storageManager: { type: null },
+      style: '.txt-red{color: red}'
   });
+
+
+editor.Panels.addButton('options',
+    [{
+        id: 'save',
+        className: '',
+        label: '<u>save and close</u>',
+        command: function (editor1, sender) {
+            window.opener.mQuery('textarea.builder-html').val(editor.runCommand('gjs-get-inlined-html'));
+            window.close();
+        },
+        attributes: {title: 'Save and close'}
+    }
+ ]);
+
+
+editor.Panels.addPanel({
+  id: 'basic-actions',
+  el: '.panel__basic-actions',
+  buttons: [
+    {
+      id: 'alert-button',
+      className: 'btn-alert-button',
+      label: 'Click my butt(on)',
+      command(editor) { alert('Hello World'); }
+    }
+  ]
+});
+  editor.on('storage:store', function(e) {
+    saveContent(); //your method where you store html content of document in DB using ajax
+  })
+
+  function saveContent() {
+var iframe = document.getElementsByTagName('iframe')[0];
+var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+var frameBody = innerDoc.querySelector('body');
+var style = frameBody.querySelector('style');
+var htmlContent = frameBody.querySelector("#wrapper");
+var html=htmlContent.innerHTML; //get html content of document
+var css=editor.getCss(); //get css content of document
+window.opener.mQuery('textarea.builder-html').val(html)
+  }
 </script>
 
 </body>

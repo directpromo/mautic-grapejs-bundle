@@ -42,7 +42,14 @@ return [
             ],
         ],
     ],
-    'routes'     => [],
+    'routes'     => [
+        'main' => [
+            'mautic_grapejs_action' => [
+                'path'       => '/grapejs/{objectAction}/{objectId}',
+                'controller' => 'MauticGrapeJsBundle:GrapeJs:execute',
+            ],
+        ],
+    ],
     'menu'       => [],
     'parameters' => [
     ],

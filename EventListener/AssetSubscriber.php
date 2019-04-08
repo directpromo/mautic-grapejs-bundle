@@ -20,16 +20,6 @@ use Symfony\Component\Routing\RouterInterface;
 class AssetSubscriber extends CommonSubscriber
 {
 
-    /**
-     * AssetSubscriber constructor.
-     *
-     * @param RouterInterface $router
-     */
-    public function __construct(RouterInterface $router)
-    {
-        $this->router = $router;
-    }
-
 
     public static function getSubscribedEvents()
     {
@@ -43,8 +33,6 @@ class AssetSubscriber extends CommonSubscriber
      */
     public function injectAssets(CustomAssetsEvent $assetsEvent)
     {
-        $assetsEvent->addScript('https://unpkg.com/grapesjs');
-        $assetsEvent->addScript('http://mautic.test/mautic/plugins/MauticGrapeJsBundle/Assets/js/grapejs.js');
-        $assetsEvent->addStylesheet('https://unpkg.com/grapesjs/dist/css/grapes.min.css');
+        $assetsEvent->addScript('plugins/MauticGrapeJsBundle/Assets/js/grapejs.js');
     }
 }

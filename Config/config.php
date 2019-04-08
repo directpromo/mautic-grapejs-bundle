@@ -18,16 +18,6 @@ return [
         'events'  => [
             'mautic.grape.js.asset.subscriber'=>[
                 'class'=> \MauticPlugin\MauticGrapeJsBundle\EventListener\AssetSubscriber::class,
-                'arguments' => [
-                    'router',
-                ],
-            ],
-            'mautic.grape.js.button.subscriber'=>[
-                'class'=> \MauticPlugin\MauticGrapeJsBundle\EventListener\ButtonSubscriber::class,
-                'arguments' => [
-                    'mautic.helper.integration',
-                    'router',
-                ],
             ]
         ],
         'forms'   => [

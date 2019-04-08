@@ -10,7 +10,8 @@ Mautic.launchBuilderCustom = function (formName, actionName) {
 }
 
 Mautic.launchBuilder = function (formName, actionName) {
-    if (mQuery('.theme-selected').find('.select-theme-link').attr('data-theme') === 'mautic_code_mode') {
+
+    if (actionName !== 'email' ||  mQuery('.theme-selected').find('.select-theme-link').attr('data-theme') === 'mautic_code_mode') {
         Mautic.lanunchBuilderCore(formName, actionName);
     }else{
         Mautic.launchBuilderCustom(formName, actionName);

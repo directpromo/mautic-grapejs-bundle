@@ -33,6 +33,6 @@ class AssetSubscriber extends CommonSubscriber
      */
     public function injectAssets(CustomAssetsEvent $assetsEvent)
     {
-        $assetsEvent->addScript('plugins/MauticGrapeJsBundle/Assets/js/grapejs.js');
+        $assetsEvent->addScript('plugins/MauticGrapeJsBundle/Assets/js/builder.js');
     }
 }

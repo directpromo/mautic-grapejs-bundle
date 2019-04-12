@@ -18,12 +18,20 @@ return [
         'events'  => [
             'mautic.grape.js.asset.subscriber'=>[
                 'class'=> \MauticPlugin\MauticGrapeJsBundle\EventListener\AssetSubscriber::class,
-            ]
+            ],
         ],
         'forms'   => [
         ],
         'helpers' => [],
         'other'   => [
+            'mautic.grape.js.uploader' => [
+                'class'     => MauticPlugin\MauticGrapeJsBundle\Uploader\GrapeJsUploader::class,
+                'arguments' => [
+                    'mautic.helper.file_uploader',
+                    'mautic.helper.core_parameters',
+                    'mautic.helper.paths',
+                ],
+            ],
         ],
         'models'       => [],
         'integrations' => [
@@ -33,14 +41,21 @@ return [
         ],
     ],
     'routes'     => [
+        'public' => [
+            'mautic_grapejs_upload' => [
+                'path'       => '/grapesjs/upload',
+                'controller' => 'MauticGrapeJsBundle:Ajax:upload',
+            ],
+        ],
         'main' => [
             'mautic_grapejs_action' => [
-                'path'       => '/grapejs/{objectAction}/{objectId}',
-                'controller' => 'MauticGrapeJsBundle:GrapeJs:execute',
+                'path'       => '/grapejs/{objectType}/builder/{objectId}',
+                'controller' => 'MauticGrapeJsBundle:GrapeJs:builder',
             ],
         ],
     ],
     'menu'       => [],
     'parameters' => [
+        'grapes_js_image_directory'=> 'grapesjs'
     ],
 ];

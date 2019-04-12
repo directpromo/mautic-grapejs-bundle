@@ -1,7 +1,7 @@
 <?php
 
 /*
- * @copyright   2016 Mautic Contributors. All rights reserved
+ * @copyright   2019 Mautic Contributors. All rights reserved
  * @author      Mautic
  *
  * @link        http://mautic.org
@@ -21,11 +21,12 @@ class GrapeJsController extends CommonController
     /**
      * Builder.
      *
-     * @param $objectId
+     * @param string $objectType
+     * @param int $objectId
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function builderAction($objectId)
+    public function builderAction($objectType, $objectId)
     {
         /** @var \Mautic\EmailBundle\Model\EmailModel $model */
         $model = $this->getModel('email');
@@ -85,28 +86,26 @@ class GrapeJsController extends CommonController
         /** @var CoreParametersHelper $coreParametersHelpers */
         $coreParametersHelpers = $this->get('mautic.helper.core_parameters');
 
+        $templateDirectory = 'Builder\Email';
+
         preg_match("/<body[^>]*>(.*?)<\/body>/is", $templateWithBody, $matches);
         $body = $matches[1];
         $templateWithoutBody = str_replace($body, '||BODY||', $templateWithBody);
         $hiddenTemplate = '<textarea id="templateBuilder" style="display:none">'. $templateWithoutBody.'</textarea>';
         $templateWithoutBody = str_replace('||BODY||', '', $templateWithoutBody);
-        $libraries = $this->renderView('MauticGrapeJsBundle:Builder:head.html.php', [
+        $libraries = $this->renderView('MauticGrapeJsBundle:'.$templateDirectory.':head.html.php', [
             'siteUrl'     => $coreParametersHelpers->getParameter('site_url'),
         ]);
         $templateForBuilder = str_replace('</head>', $libraries.'</head>', $templateWithoutBody);
 
-        $builderCode = $this->renderView('MauticGrapeJsBundle:Builder:builder.html.php', []);
+        $builderCode = $this->renderView('MauticGrapeJsBundle:'.$templateDirectory.':builder.html.php', ['images'=>$this->get('mautic.grape.js.uploader')->getImages()]);
         $templateForBuilder = str_replace('</body>', $builderCode.$hiddenTemplate.'</body>', $templateForBuilder);
 
 
         return $this->render(
-            'MauticGrapeJsBundle:Builder:body.html.php',
+            'MauticGrapeJsBundle:'.$templateDirectory.':body.html.php',
             [
                 'templateForBuilder'     => $templateForBuilder,
-                'passthroughVars' => [
-                    'activeLink'    => '#mautic_email_index',
-                    'mauticContent' => 'email',
-                ],
             ]
         );
 

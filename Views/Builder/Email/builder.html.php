@@ -3,8 +3,9 @@
         height: 100%;
         margin: 0;
     }
+
 </style>
-<div id="gjs" style="height:0px; overflow:hidden"></div>
+<div id="gjs" style="height:0px; overflow:hidden;"></div>
 <script type="text/javascript">
     // Set up GrapesJS editor with the Newsletter plugin
     var bodytext = '';
@@ -19,6 +20,19 @@
         storageManager: {type: null},
         container: '#gjs',
         components: bodytext,
+
+        assetManager: {
+            assets: <?php echo json_encode($images); ?>,
+            upload: '<?php echo $view['router']->generate('mautic_grapejs_upload', [], true) ?>',
+            uploadName: 'files',
+            multiUpload: true,
+            // Text on upload input
+            uploadText: 'Drop files here or click to upload',
+            // Label for the add button
+            addBtnText: 'Add image',
+            // Default title for the asset manager modal
+            modalTitle: 'Select Image',
+        },
 
         plugins: ['grapesjs-parser-postcss', 'gjs-preset-newsletter'],
         pluginsOpts: {
@@ -37,7 +51,7 @@
                     padding: 0,
                 }
             }
-        }
+        },
     });
     var pnm = editor.Panels;
     pnm.removeButton("options", "gjs-open-import-template");

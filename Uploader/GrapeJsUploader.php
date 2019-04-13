@@ -16,6 +16,8 @@ use Mautic\CoreBundle\Helper\CoreParametersHelper;
 use Mautic\CoreBundle\Helper\FileUploader;
 use Mautic\CoreBundle\Helper\PathsHelper;
 use MauticPlugin\MauticBadgeGeneratorBundle\Entity\Badge;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
 class GrapeJsUploader
@@ -135,9 +137,19 @@ class GrapeJsUploader
      */
     public function getImages()
     {
-        $finder = new Finder();
-        $finder->files()->in($this->getUploadDir());
         $files = [];
+        $uploadDir = $this->getUploadDir();
+        $fileSystem = new Filesystem();
+        if (!$fileSystem->exists($uploadDir)) {
+            try {
+                $fileSystem->mkdir($uploadDir);
+            } catch (IOException $exception) {
+                return $files;
+            }
+        }
+
+        $finder = new Finder();
+        $finder->files()->in($uploadDir);
         foreach ($finder as $file) {
             $files[] = $this->getFullUrl($file->getFilename());
         }

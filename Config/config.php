@@ -18,6 +18,9 @@ return [
         'events'  => [
             'mautic.grape.js.asset.subscriber'=>[
                 'class'=> \MauticPlugin\MauticGrapeJsBundle\EventListener\AssetSubscriber::class,
+                'arguments' => [
+                    'mautic.helper.integration'
+                ],
             ],
         ],
         'forms'   => [

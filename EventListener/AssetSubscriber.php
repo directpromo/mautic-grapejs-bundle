@@ -14,12 +14,26 @@ namespace MauticPlugin\MauticGrapeJsBundle\EventListener;
 use Mautic\CoreBundle\CoreEvents;
 use Mautic\CoreBundle\Event\CustomAssetsEvent;
 use Mautic\CoreBundle\EventListener\CommonSubscriber;
+use Mautic\PluginBundle\Helper\IntegrationHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 
 class AssetSubscriber extends CommonSubscriber
 {
+    /**
+     * @var IntegrationHelper
+     */
+    private $integrationHelper;
 
+    /**
+     * AssetSubscriber constructor.
+     *
+     * @param IntegrationHelper $integrationHelper
+     */
+    public function __construct(IntegrationHelper $integrationHelper)
+    {
+        $this->integrationHelper = $integrationHelper;
+    }
 
     public static function getSubscribedEvents()
     {
@@ -33,6 +47,9 @@ class AssetSubscriber extends CommonSubscriber
      */
     public function injectAssets(CustomAssetsEvent $assetsEvent)
     {
-        $assetsEvent->addScript('plugins/MauticGrapeJsBundle/Assets/js/builder.js');
+        $grapeJsIntegration = $this->integrationHelper->getIntegrationObject('GrapeJs');
+        if (null !== $grapeJsIntegration && $grapeJsIntegration->getIntegrationSettings()->getIsPublished()) {
+            $assetsEvent->addScript('plugins/MauticGrapeJsBundle/Assets/js/builder.js');
+        }
     }
 }

@@ -48,7 +48,7 @@ class AssetSubscriber extends CommonSubscriber
     public function injectAssets(CustomAssetsEvent $assetsEvent)
     {
         $grapeJsIntegration = $this->integrationHelper->getIntegrationObject('GrapeJs');
-        if (null !== $grapeJsIntegration && $grapeJsIntegration->getIntegrationSettings()->getIsPublished()) {
+        if ($grapeJsIntegration && $grapeJsIntegration->getIntegrationSettings()->getIsPublished()) {
             $assetsEvent->addScript('plugins/MauticGrapeJsBundle/Assets/js/builder.js');
         }
     }

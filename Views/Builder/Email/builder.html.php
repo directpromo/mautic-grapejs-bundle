@@ -34,7 +34,7 @@
             modalTitle: 'Select Image',
         },
 
-        plugins: ['grapesjs-parser-postcss', 'gjs-preset-newsletter', 'gjs-blocks-avance', 'html-block'],
+        plugins: ['grapesjs-parser-postcss', 'gjs-preset-newsletter'],
         pluginsOpts: {
             'gjs-preset-newsletter': {
                 modalLabelImport: 'Paste all your code here below and click import',

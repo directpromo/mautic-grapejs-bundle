@@ -1,18 +1,7 @@
 {
   "name": "kuzmany/mautic-grape-js-bundle",
   "type": "mautic-plugin",
-  "license": "LGPL-3.0-or-later",
-  "description": "GrapeJS integration for Mautic",
-  "keywords": [ "grapejs", "mautic", "templating", "landing page", "email"],
-  "autoload": {
-    "psr-4": {
-      "MauticPlugin\\MauticGrapeJsBundle" : "src/",
-    }
-  },
   "require": {
     "mautic/composer-plugin": "^1.0"
-  },
-  "config": {
-    "preferred-install": "dist"
-  },
+  }
 }

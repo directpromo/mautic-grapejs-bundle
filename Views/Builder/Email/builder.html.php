@@ -13,7 +13,7 @@
     if (m) {
         bodytext = m[1];
     }
-    console.log(bodytext);
+    //console.log(bodytext);
     var editor = grapesjs.init({
         height: '100%',
         noticeOnUnload: 0,
@@ -84,4 +84,12 @@
             attributes: {title: 'Save and close'}
         }
         ]);
+
+
+    let iFrame = mQuery("#gjs iframe.gjs-frame");
+    editor.on('rte:enable', (some, argument) => {
+        let elem = iFrame.contents().find(some.$el[0]);
+        elem.atwho('setIframe', iFrame[0]);
+        Mautic.initAtWho(elem, 'email:getBuilderTokens', false);
+    });
 </script>

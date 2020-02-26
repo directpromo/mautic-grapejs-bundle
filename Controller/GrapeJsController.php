@@ -28,15 +28,21 @@ class GrapeJsController extends CommonController
      */
     public function builderAction($objectType, $objectId)
     {
-        /** @var \Mautic\EmailBundle\Model\EmailModel $model */
-        $model = $this->getModel('email');
+
+        /** @var \Mautic\EmailBundle\Model\EmailModel|\Mautic\EmailBundle\Model\EmailModel $model */
+        $model = $this->getModel($objectType);
+        $aclToCheck = 'email:emails:';
+        if ($objectType !== 'page') {
+            $aclToCheck = 'page:pages:';
+        }
 
         //permission check
         if (strpos($objectId, 'new') !== false) {
             $isNew = true;
-            if (!$this->get('mautic.security')->isGranted('email:emails:create')) {
+            if (!$this->get('mautic.security')->isGranted($aclToCheck.'create')) {
                 return $this->accessDenied();
             }
+
             $entity = $model->getEntity();
             $entity->setSessionId($objectId);
         } else {
@@ -44,8 +50,8 @@ class GrapeJsController extends CommonController
             $entity = $model->getEntity($objectId);
             if ($entity == null
                 || !$this->get('mautic.security')->hasEntityAccess(
-                    'email:emails:viewown',
-                    'email:emails:viewother',
+                    $aclToCheck.'viewown',
+                    $aclToCheck.'viewother',
                     $entity->getCreatedBy()
                 )
             ) {
@@ -54,10 +60,10 @@ class GrapeJsController extends CommonController
         }
 
         $template = InputHelper::clean($this->request->query->get('template'));
-        $slots    = $this->factory->getTheme($template)->getSlots('email');
+        $slots    = $this->factory->getTheme($template)->getSlots($objectType);
 
         //merge any existing changes
-        $newContent = $this->get('session')->get('mautic.emailbuilder.'.$objectId.'.content', []);
+        $newContent = $this->get('session')->get('mautic.'.$objectType.'builder.'.$objectId.'.content', []);
         $content    = $entity->getContent();
 
         if (is_array($newContent)) {
@@ -69,24 +75,24 @@ class GrapeJsController extends CommonController
         // Replace short codes to emoji
         $content = EmojiHelper::toEmoji($content, 'short');
 
-        $logicalName = $this->factory->getHelper('theme')->checkForTwigTemplate(':'.$template.':email.html.php');
+        $logicalName = $this->factory->getHelper('theme')->checkForTwigTemplate(':'.$template.':'.$objectType.'.html.php');
 
         $templateWithBody =  $this->renderView(
             $logicalName,
             [
-                'isNew'    => $isNew,
-                'slots'    => $slots,
-                'content'  => $content,
-                'email'    => $entity,
-                'template' => $template,
-                'basePath' => $this->request->getBasePath(),
+                'isNew'     => $isNew,
+                'slots'     => $slots,
+                'content'   => $content,
+                $objectType => $entity,
+                'template'  => $template,
+                'basePath'  => $this->request->getBasePath(),
             ]
         );
 
         /** @var CoreParametersHelper $coreParametersHelpers */
         $coreParametersHelpers = $this->get('mautic.helper.core_parameters');
 
-        $templateDirectory = 'Builder\Email';
+        $templateDirectory = ($objectType == 'email') ? 'Builder\Email' : 'Builder\Page';
 
         preg_match("/<body[^>]*>(.*?)<\/body>/is", $templateWithBody, $matches);
         $body = $matches[1];

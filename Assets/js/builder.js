@@ -1,9 +1,11 @@
-
 Mautic.lanunchBuilderCore = Mautic.launchBuilder;
 
 Mautic.launchBuilderCustom = function (formName, actionName) {
     var currentActiveTemplate = mQuery('.theme-selected').find('.select-theme-link').attr('data-theme');
     var builderUrl = (mQuery('#builder_url').val()).replace('s/emails/','s/grapejs/email/')+'?template=' + currentActiveTemplate;
+    if ( (mQuery('#builder_url').val()).indexOf('pages') !== -1) {
+        builderUrl = (mQuery('#builder_url').val()).replace('s/pages/','s/grapejs/page/')+'?template=' + currentActiveTemplate;
+    }
     Mautic.loadNewWindowTemp({
         "windowUrl": builderUrl+"&t="+new Date().getTime(),
         "popupName": "grapejsPopup"
@@ -13,7 +15,7 @@ Mautic.launchBuilderCustom = function (formName, actionName) {
 // launch custom builder for emails and pages without code mode
 Mautic.launchBuilder = function (formName, actionName) {
     var isCodeMode = mQuery('.theme-selected').find('.select-theme-link').attr('data-theme') === 'mautic_code_mode';
-    if(formName === 'emailform' && !isCodeMode) {
+    if((formName === 'emailform' || formName === 'page' ) && !isCodeMode) {
         Mautic.launchBuilderCustom(formName, actionName);
         return;
     }

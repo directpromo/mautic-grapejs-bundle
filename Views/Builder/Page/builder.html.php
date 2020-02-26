@@ -11,9 +11,8 @@
     var bodytext = '';
     var m = (window.opener.mQuery('textarea.builder-html').val()).match(/<body[^>]*>([^<]*(?:(?!<\/?body)<[^<]*)*)<\/body\s*>/i);
     if (m) {
-        bodytext = m[1];
+        bodytext = m[0];
     }
-    console.log(bodytext);
     var editor = grapesjs.init({
         height: '100%',
         noticeOnUnload: 0,
@@ -76,8 +75,7 @@
             className: 'btn-alert-button',
             label: 'Save and close',
             command: function (editor1, sender) {
-                var newContent = ($('textarea#templateBuilder').val()).replace('||BODY||', editor.runCommand('gjs-get-inlined-html'));
-                console.log(newContent);
+                var newContent = ($('textarea#templateBuilder').val()).replace('||BODY||', editor.getHtml());
                 window.opener.mQuery('textarea.builder-html').val(newContent);
                 window.close();
             },

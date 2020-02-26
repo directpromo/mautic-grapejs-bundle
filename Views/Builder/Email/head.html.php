@@ -1,3 +1,8 @@
+<?php
+if (!isset($mauticContent)) {
+    $mauticContent = '';
+}
+?>
 <script>
     var mauticBasePath    = '<?php echo $app->getRequest()->getBasePath(); ?>';
     var mauticBaseUrl     = '<?php echo $view['router']->path('mautic_base_index'); ?>';

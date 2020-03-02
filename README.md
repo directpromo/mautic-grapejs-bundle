@@ -20,8 +20,9 @@ Just go to email create new/edit and click to Launch builder button. Should open
 ### Features
 
 - Launch Grape JS builder with save and close button
-- File manage
+- File manager
 - Backward compatibility with all your templates (old, new)
+- Auto complete for tokens ({contactfield=firstname})
 
 ### Todo
 

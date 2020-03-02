@@ -28,7 +28,6 @@ Just go to email create new/edit and click to Launch builder button. Should open
 It's experimental plugin. 
 Every new feature should be sponsored. If you're interest please write me to support@mtcextendee.com 
 
-- Support for autocomplete ({contactfield=firstname} etc.)
 - Custom HTML block
 - Start from zero
 - Auto saving
